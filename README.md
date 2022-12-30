@@ -13,5 +13,8 @@ Alternatively, you can pipe the input text to the program through stdin:
 $ cat input.txt | python myprogram.py
 This will read the input text from input.txt through stdin and write the processed text to stdout.
 
+You can also read input from a URL by specifying the --url argument:
 
+Copy code
+python my_program.py --url http://www.example.com/input.txt
 
