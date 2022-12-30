@@ -32,19 +32,9 @@ else:
     # read the input
     input_text = input_file.read()
 
-
-
 openai.api_key = config['openai']['api_key']
 print ("API KEY ", openai.api_key)
 
 response = openai.Image.create(prompt=input_text, model='image-alpha-001')
 image_url = response['data'][0]['url']
 print ("URL = ", image_url)
-
-# image_data = response["data"]
-# # image_data = image_data.encode("utf-8")
-# # image_data = base64.decodebytes(image_data)
-
-# with open("generated_image.jpg", "wb") as f:
-#     f.write(image_data)
-#     f.close()
