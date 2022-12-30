@@ -1,6 +1,10 @@
 import argparse
+import configparser
+import os
 import sys
 import requests
+import openai
+import base64
 
 # create the parser
 parser = argparse.ArgumentParser(description='Generate an image with DALL-E')
@@ -13,6 +17,10 @@ parser.add_argument('--url', type=str, help='input URL')
 # parse the arguments
 args = parser.parse_args()
 
+# try to read the API key from the .openai-api file
+config = configparser.ConfigParser()
+config.read(os.path.expanduser('~/.openai-api'))
+
 # check if the --url argument was provided
 if args.url:
     # read the input from the URL
@@ -24,17 +32,19 @@ else:
     # read the input
     input_text = input_file.read()
 
-# send the input to DALL-E for image generation
-response = requests.post(
-    'https://api.openai.com/v1/images/generations',
-    headers={'Content-Type': 'application/json'},
-    json={'model': 'image-alpha-001', 'prompt': input_text},
-    auth=('YOUR_API_KEY', '')
-)
 
-# check if the request was successful
-if response.status_code == 200:
-    # print the generated image URL
-    print(response.json()['data'][0]['url'])
-else:
-    print('Error:', response.status_code)
+
+openai.api_key = config['openai']['api_key']
+print ("API KEY ", openai.api_key)
+
+response = openai.Image.create(prompt=input_text, model='image-alpha-001')
+image_url = response['data'][0]['url']
+print ("URL = ", image_url)
+
+image_data = response["data"]
+# image_data = image_data.encode("utf-8")
+# image_data = base64.decodebytes(image_data)
+
+with open("generated_image.jpg", "wb") as f:
+    f.write(image_data)
+    f.close()
