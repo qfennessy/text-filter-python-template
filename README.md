@@ -1,20 +1,15 @@
-# text-filter-python-template
-python template for a Unix style filter program, created by openai.com chatbot
+To run this program, you can use the following command to read input from a file:
 
-This program defines a single optional argument -f or --file, which specifies the name of an input file. If the -f argument is not provided, the program will read from stdin. The program reads the input text, processes it (in this case, it converts it to uppercase), and writes the processed text to stdout.
+python my_program.py --input my_input_file.txt
 
-To use this program, you can either provide the input text through stdin, or specify an input file using the -f argument. For example:
+Alternatively, you can use standard input by omitting the --input argument:
 
-$ python myprogram.py -f input.txt
-This will read the input text from the file input.txt and write the processed text to stdout.
-
-Alternatively, you can pipe the input text to the program through stdin:
-
-$ cat input.txt | python myprogram.py
-This will read the input text from input.txt through stdin and write the processed text to stdout.
+echo "a two-story pink house with a white fence" | python my_program.py
 
 You can also read input from a URL by specifying the --url argument:
 
-Copy code
 python my_program.py --url http://www.example.com/input.txt
+Note that you will need to replace YOUR_API_KEY with your own API key, which you can obtain by creating an account on the OpenAI website and generating a key for the DALL-E API.
+
+
 

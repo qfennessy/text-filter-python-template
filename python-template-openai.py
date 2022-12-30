@@ -1,9 +1,9 @@
 import argparse
 import sys
-from urllib.request import urlopen
+import requests
 
 # create the parser
-parser = argparse.ArgumentParser(description='Process some input.')
+parser = argparse.ArgumentParser(description='Generate an image with DALL-E')
 
 # add the --input and --url arguments
 parser.add_argument('--input', type=argparse.FileType('r'),
@@ -16,8 +16,7 @@ args = parser.parse_args()
 # check if the --url argument was provided
 if args.url:
     # read the input from the URL
-    with urlopen(args.url) as response:
-        input_text = response.read()
+    input_text = requests.get(args.url).text
 else:
     # get the input file (either from the --input argument or stdin)
     input_file = args.input or sys.stdin
@@ -25,5 +24,17 @@ else:
     # read the input
     input_text = input_file.read()
 
-# write the input to stdout
-sys.stdout.write(input_text)
+# send the input to DALL-E for image generation
+response = requests.post(
+    'https://api.openai.com/v1/images/generations',
+    headers={'Content-Type': 'application/json'},
+    json={'model': 'image-alpha-001', 'prompt': input_text},
+    auth=('YOUR_API_KEY', '')
+)
+
+# check if the request was successful
+if response.status_code == 200:
+    # print the generated image URL
+    print(response.json()['data'][0]['url'])
+else:
+    print('Error:', response.status_code)
