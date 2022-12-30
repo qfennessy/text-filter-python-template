@@ -1,25 +1,29 @@
 import argparse
 import sys
+from urllib.request import urlopen
 
-# create an ArgumentParser object
-parser = argparse.ArgumentParser(description='Process some integers.')
+# create the parser
+parser = argparse.ArgumentParser(description='Process some input.')
 
-# add a "-f" optional argument with a required value
-parser.add_argument('-f', '--file', type=argparse.FileType('r'), help='input file')
+# add the --input and --url arguments
+parser.add_argument('--input', type=argparse.FileType('r'),
+                    help='input file (defaults to stdin)')
+parser.add_argument('--url', type=str, help='input URL')
 
-# parse the command line arguments
+# parse the arguments
 args = parser.parse_args()
 
-# check if the file argument was provided
-if args.file:
-    # read from the file
-    input_text = args.file.read()
+# check if the --url argument was provided
+if args.url:
+    # read the input from the URL
+    with urlopen(args.url) as response:
+        input_text = response.read()
 else:
-    # read from stdin
-    input_text = sys.stdin.read()
+    # get the input file (either from the --input argument or stdin)
+    input_file = args.input or sys.stdin
 
-# process the input text
-processed_text = input_text.upper()
+    # read the input
+    input_text = input_file.read()
 
-# write the processed text to stdout
-sys.stdout.write(processed_text)
+# write the input to stdout
+sys.stdout.write(input_text)
